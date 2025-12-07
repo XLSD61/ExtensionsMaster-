@@ -424,7 +424,7 @@
 | `PlayerAbilities newAbilities = currentAbilities.SetFlag(targetFlag, enableFlag);` | Adds or removes a specified flag based on boolean. | `[LOG] Does the new set have Shield? -> True`<br>`[LOG] New Ability Set: DoubleJump, Dash, Shield` |
 | `PlayerAbilities removeAbilities = newAbilities.SetFlag(PlayerAbilities.DoubleJump, false);` | Removes the DoubleJump flag explicitly. | `[LOG] Was DoubleJump successfully removed? -> True`<br>`[LOG] Final Ability Set: Dash, Shield` |
 
-
+#Text – Usage Examples (Text & TextMeshPro)
 | Code Example | Description | Expected Console Output |
 | :--- | :--- | :--- |
 | `targetTextComponent.SetTextAndColor("Status: Initialized", newTargetColor);` | Sets both text and color in one call. | `[LOG] SetTextAndColor applied. Text is now 'Status: Initialized' and color is RGBA(0,1,1,1)` |
@@ -438,6 +438,7 @@
 | `StartCoroutine(outputTextComponent.FadeToAlpha(1f, fadeDuration));` | Fades text alpha from current to 1.0 over duration. | `[LOG] Starting FadeToAlpha to alpha 1.0 over 1.5 seconds.` |
 | `targetTextComponent.SetTextFormat("Active Components: {0} / {1}", 2, 3);` | Formats text using string.Format syntax. | *(Text updates internally, no console output)* |
 
+# Image Extensions – Usage Examples 
 | Code Example | Description | Expected Console Output |
 | :--- | :--- | :--- |
 | `targetImage.SetColor(imageColor);` | Sets Image component color directly. | `[LOG] SetColor applied: Image color is now RGBA(1,1,0,1)` |
@@ -454,6 +455,98 @@
 | `targetSlider.SetWholeNumbers(true);` | Forces slider to only use integers. | `[LOG] SetWholeNumbers applied. Slider now only returns integers.` |
 | `targetSlider.SetValue(50f);` | Sets the slider value and notifies listeners. | `[LOG] SetValue applied. Slider value: 50` |
 | `targetSlider.AddListener(OnSliderValueChanged);` | Adds a listener for slider value change. | `[LOG] AddListener applied: Slider change will trigger console log.` |
+
+# Sprite Renderer Extensions – Usage Examples 
+| Code Example | Description | Expected Console Output |
+| :--- | :--- | :--- |
+| `targetSpriteRenderer.ResetColor();` | Resets color to pure white with full alpha (1.0). | `1a. ResetColor applied. Current Alpha: 1` |
+| `targetSpriteRenderer.SetAlpha(targetAlpha);` | Changes only the alpha value, keeps RGB the same. | `1b. SetAlpha(0.3) applied. Current Alpha: 0.3` |
+| `targetSpriteRenderer.SetColor(newColor);` | Applies a new RGB color without touching the alpha. | `1c. SetColor(Red) applied. Current Color: RGBA(1,0,0,0.3)` |
+| `targetSpriteRenderer.SetColorAndAlpha(Color.blue, 1f);` | Sets both color and alpha in a single call. | `1d. SetColorAndAlpha(Blue,1.0) applied. Current Color: RGBA(0,0,1,1)` |
+| `targetSpriteRenderer.ToggleVisibility();` | Toggles alpha between 0 and 1. | `1e. ToggleVisibility applied. Is Visible?: False` |
+| `targetSpriteRenderer.ToggleVisibility();` | Toggles visibility back. | `1f. ToggleVisibility applied again. Is Visible?: True` |
+| `targetSpriteRenderer.SetSprite(newSprite);` | Updates SpriteRenderer’s sprite reference. | `2a. SetSprite applied: Sprite source updated.` |
+| `targetSpriteRenderer.SetSortingOrder(newSortingOrder);` | Sets sorting order layer integer. | `2b. SetSortingOrder applied. Sorting Order: 100` |
+| `targetSpriteRenderer.SetSortingLayer(newSortingLayerName);` | Assigns a sorting layer by name. | `2c. SetSortingLayer applied. Layer Name: 'UI'` |
+
+# Material Extensions – Usage Examples 
+| Code Example | Description | Expected Console Output |
+| :--- | :--- | :--- |
+| `_targetMaterial.SetMainColor(newMainColor);` | Sets the material’s main (albedo) color. | `1a. SetMainColor applied: Main color set to RGBA(0,1,0,1).` |
+| `_targetMaterial.SetAlpha(targetAlpha);` | Updates only the alpha channel of the material’s main color. | `1b. SetAlpha applied: Main color alpha set to 0.5.` |
+| `_targetMaterial.SetEmissionColor(emissionColor);` | Sets emission color (requires emission-enabled shader). | `1c. SetEmissionColor applied: Emission color set to RGBA(0,0,1,1).` |
+| `_targetMaterial.SetColor("_SpecColor", Color.yellow);` | Generic color setter using a shader property name. | `1d. SetColor('_SpecColor', Yellow) applied.` |
+| `_targetMaterial.SetOffset(newTextureOffset);` | Sets the main texture UV offset (scrolling effect). | `2a. SetOffset applied: UV offset set to (0.2, 0.5).` |
+| `_targetMaterial.SetTiling(newTextureTiling);` | Sets UV tiling scale of the main texture. | `2b. SetTiling applied: UV scale set to (2, 2).` |
+| `_targetMaterial.SetFloat(floatPropertyName, floatPropertyValue);` | Sets a float property on the shader if it exists. | `3a. SetFloat('_Glossiness', 0.8) applied.` |
+| `_targetMaterial.Log("message");` | Logs material info using the built-in Log extension. | `3b. Log method called: You can chain .Log()...` |
+
+# MeshRenderer Extensions – Usage Examples 
+| Code Example | Description | Expected Console Output |
+| :--- | :--- | :--- |
+| `targetRenderer.IsRendererActive();` | Checks if the MeshRenderer component is enabled. | `1a. Initial State: Renderer Active? True/False` |
+| `targetRenderer.ToggleRenderer(false);` | Disables the renderer, making the object invisible. | `1b. ToggleRenderer(false) applied. Renderer Active? False` |
+| `targetRenderer.ToggleRenderer(true);` | Enables the renderer again. | `1c. ToggleRenderer(true) applied. Renderer Active? True` |
+| `targetRenderer.SetShadowCastingMode(newShadowMode);` | Sets shadow casting mode (On, Off, TwoSided, OnlyShadows). | `1d. SetShadowCastingMode applied: Mode is now Off` |
+| `targetRenderer.SetReceiveShadows(shouldReceiveShadows);` | Enables/disables receiving shadows. | `1e. SetReceiveShadows applied: Receives shadows? False` |
+| `targetRenderer.ToggleCastShadows();` | Toggles between casting shadows or not. | `1f. ToggleCastShadows called. New Shadow Mode: On/Off` |
+| `targetRenderer.SetReflectionProbeUsage(newReflectionProbeUsage);` | Sets how the renderer interacts with reflection probes. | `1g. SetReflectionProbeUsage applied: Usage is BlendProbes` |
+| `targetRenderer.GetMaterial();` | Returns the renderer’s first material instance. | `2a. GetMaterial applied. Initial Material name: 'MaterialName'` |
+| `targetRenderer.SetMaterial(newMaterialInstance);` | Replaces the primary material with the provided instance. | `2b. SetMaterial applied. Primary material changed to: 'NewMaterial'` |
+| `targetRenderer.SetMaterials(new Material[] { initialMaterial });` | Replaces all assigned materials with a new list. | `2c. SetMaterials applied. Material array reset to the initial material.` |
+
+# Camera Extensions – Usage Examples 
+| Code Example | Description | Expected Console Output |
+| :--- | :--- | :--- |
+| `Vector3 worldPos = targetCamera.ScreenToWorld(simulatedScreenPoint, targetZDepth);` | Converts a 2D screen point to a 3D world point at a specified Z depth. | `1a. Screen Point (500, 500) converted to World Point (Z=10): (x, y, z)` |
+| `Vector3 viewportPoint = targetCamera.WorldToViewport(worldPos);` | Converts a world position to normalized viewport coordinates (0–1). | `1b. World Point (x, y) converted to Viewport: (0.52, 0.48)` |
+| `Bounds orthoBounds = targetCamera.GetOrthographicBounds();` | Calculates the world-space bounds of the camera’s orthographic view. | `1c. Orthographic Bounds Center: (cx, cy), Size: (w x h)` |
+| `targetCamera.SetClearColor(newBackgroundColor);` | Sets the camera background/clear color. | `2a. SetClearColor applied: Background color set to RGBA(0,0,1,1)` |
+| `targetCamera.SetOrthographicSize(newOrthoSize);` | Sets the orthographic size (2D zoom). | `2b. SetOrthographicSize applied: Size is now 8` |
+| `bool isTargetVisible = targetCamera.IsVisible(targetRenderer);` | Checks if the provided Renderer is within the camera frustum (visible). | `3a. IsVisible applied: Is the target renderer visible to the camera? True/False` |
+
+# Time Extensions – Usage Examples 
+| Code Example | Description | Expected Console Output |
+| :--- | :--- | :--- |
+| `string mmss = simulatedDuration.ToMinutesAndSeconds();` | Formats seconds into **MM:SS**. | `1a. 3675.45s in MM:SS format: 61:15` |
+| `string mmssms = simulatedDuration.ToMinutesAndSeconds(true);` | Formats seconds into **MM:SS.ms** including milliseconds. | `1b. 3675.45s in MM:SS.ms format: 61:15.450` |
+| `string hhmmss = simulatedDuration.ToHoursMinutesAndSeconds();` | Formats seconds into **HH:MM:SS**. | `1c. 3675.45s in HH:MM:SS format: 01:01:15` |
+| `(0.0000001f).IsZero();` | Checks if value is effectively zero using float-epsilon tolerance. | `1d. Is duration 0.0000001f considered zero? True` |
+| `(1.0f).ToFrames();` | Converts seconds into frame count based on current fixedDeltaTime. | `1e. 1 second is equal to approximately 50 frames` |
+| `TimeExtensions.TogglePause();` | Toggles `Time.timeScale` between 0 and 1. | `2a. TogglePause() called. Game is now: PAUSED/RESUMED` |
+| `string formatted = _runningTime.ToMinutesAndSeconds(true);` | Continuously formats running time in Update loop. | `Current Time: 00:12.350` |
+| `TimeExtensions.ResumeTime();` | Ensures timeScale becomes 1.0. | `Time started. Press 'P' to toggle pause/resume.` |
+
+# MonoBehaviour Extensions – Usage Examples 
+| Code Example | Description | Expected Console Output |
+| :--- | :--- | :--- |
+| `this.StartCoroutineSafe(ColorBlinkRoutine());` | Starts a coroutine safely, ensuring the reference is valid. | `1a. Color Blink Routine STARTED safely. Ref: Coroutine` |
+| `this.StopCoroutineSafe(_colorBlinkRoutine);` | Stops a coroutine only if both MonoBehaviour and reference exist. | `1b. StopCoroutineSafe called after 5s delay. Routine should STOP.` |
+| `this.RestartCoroutine(OneShotFlash(), ref _colorBlinkRoutine);` | Stops the previous routine and starts a new one in one call. | `1c. RestartCoroutine applied. Object flashing once now.` |
+| `this.Delay(5f, () => StopBlinkRoutine());` | Executes an action safely after a delay (Invoke replacement). | `1b. StopCoroutineSafe called after 5s delay. Routine should STOP.` |
+| `this.Delay(actionDelay, () => {...});` | Runs an action after a specified number of seconds. | `2a. Delay(2.5s) executed successfully.` |
+| `this.DelayOneFrame(() => {...});` | Executes the action on the next frame. | `2b. DelayOneFrame executed.` |
+| `this.DelayUntil(() => isConditionMet, () => {...});` | Waits until the condition is TRUE before firing the action. | `2c. DelayUntil executed! Condition was finally met.` |
+| `StartCoroutine(ColorBlinkRoutine());` (internal) | Coroutine that alternates material colors repeatedly. | `Color switches between red/blue every blinkDuration` |
+| `StartCoroutine(OneShotFlash());` | One-time color flash routine. | `One-shot flash complete.` |
+
+# MathF Extensions – Usage Examples 
+| Code Example | Description | Expected Console Output |
+| :--- | :--- | :--- |
+| `inputValue.Remap(0f, originalMax, 0f, targetMax);` | Maps a value from one range to another (e.g., HP → slider). | `1a. Remap: Value 50 (0 to 100) -> 0.50 (0 to 1).` |
+| `inputValue.Normalize(0f, originalMax);` | Normalizes a value to 0–1 after clamping. | `1b. Normalize: Value 50 (0 to 100) -> 0.50 (0 to 1).` |
+| `excessiveAngle.Wrap(0f, 360f);` | Wraps angles beyond 360 back into the valid range. | `2a. Wrap: 450 degrees wrapped (0-360) -> 90 degrees.` |
+| `negativeAngle.Wrap(0f, 360f);` | Wraps negative angles into the correct positive range. | `2b. Wrap: -30 degrees wrapped (0-360) -> 330 degrees.` |
+| `signCheckValue.GetSign();` | Returns +1 or -1 depending on float sign. | `2c. GetSign: Sign of -12.3 is -1.` |
+| `rangeCheckValue.IsInRange(0, 10);` | Checks if an integer lies within a min–max range. | `3a. IsInRange(int): Is 5 in the range [0, 10]? True` |
+| `inputValue.IsInRange(50f, 60f);` | Checks if a float lies within a min–max range. | `3b. IsInRange(float): Is 50 in the range [50, 60]? True` |
+| `powerOfTwoValue.IsPowerOfTwo();` | Checks if a number is a power of two. | `3c. IsPowerOfTwo: Is 16 a power of two? True` |
+| `20.NextPowerOfTwo();` | Calculates the next nearest power of two. | `3d. NextPowerOfTwo: The next power of two after 20 is 32.` |
+| `1.00000001f.IsApproximately(1.0f);` | Float comparison using tolerance. | `3e. IsApproximately: Are 1.00000001f and 1.0f equal? True` |
+
+
+
+
 
 
 
