@@ -1,3 +1,20 @@
+# Extension Master – Usage Guide 💡
+
+This document shows **how to use all extension helpers** included in the project.  
+They are grouped by **type** (Transform, GameObject, Vector, etc.) and each section shows:
+
+- ✅ **What it does**
+- 🧩 **Example usage**
+- 🧠 **What it replaces**
+
+> ⚠️ All code samples assume you have the proper `using` statements for your extension namespaces, e.g.:
+> ```csharp
+> using ExtensionMasterTool;
+> ```
+
+---
+
+
 # Transform Extensions – Usage Examples
 
 ## I. Reset & Basic Setters
@@ -546,11 +563,568 @@
 
 
 
+## 1. Transform Extensions
 
+### 1.1 Reset & Basic Setters
 
+#### 🔹 ResetLocalPosition
 
+| Code Example                        | Normal Code                                 | Description                                                                 |
+| :---------------------------------- | :------------------------------------------ | :-------------------------------------------------------------------------- |
+| `child.ResetLocalPosition();`       | `child.localPosition = Vector3.zero;`       | Resets the Transform’s **local position** to `(0,0,0)` without touching rotation or scale. |
 
+#### 🔹 SetLocalScale
 
+| Code Example                        | Normal Code                                                             | Description                                                           |
+| :---------------------------------- | :---------------------------------------------------------------------- | :-------------------------------------------------------------------- |
+| `child.SetLocalScale(y: 2f);`       | `var s = child.localScale; s.y = 2f; child.localScale = s;`             | Updates one or more **local scale axes** while preserving the others. |
 
+#### 🔹 SetLocalRotationEuler
 
+| Code Example                                 | Normal Code                                                                          | Description                                                               |
+| :------------------------------------------- | :----------------------------------------------------------------------------------- | :------------------------------------------------------------------------ |
+| `child.SetLocalRotationEuler(z: 90f);`       | `var e = child.localEulerAngles; e.z = 90f; child.localEulerAngles = e;`            | Sets specific **Euler rotation axes**, keeping the remaining axes intact. |
 
+#### 🔹 ResetRotation
+
+| Code Example                   | Normal Code                                        | Description                                  |
+| :----------------------------- | :------------------------------------------------- | :------------------------------------------- |
+| `child.ResetRotation();`       | `child.localRotation = Quaternion.identity;`       | Resets local rotation to identity `(0,0,0)`. |
+
+#### 🔹 ResetScale
+
+| Code Example                | Normal Code                             | Description                      |
+| :-------------------------- | :-------------------------------------- | :------------------------------- |
+| `child.ResetScale();`       | `child.localScale = Vector3.one;`       | Resets local scale to `(1,1,1)`. |
+
+#### 🔹 SetPosition (world)
+
+| Code Example                       | Normal Code                                                          | Description                                                 |
+| :--------------------------------- | :------------------------------------------------------------------- | :---------------------------------------------------------- |
+| `child.SetPosition(x: 10f);`       | `var p = child.position; p.x = 10f; child.position = p;`             | Sets specific **world position axes**, preserving the rest. |
+
+#### 🔹 ResetLocal (all local properties)
+
+| Code Example                | Normal Code                                                    | Description                                                   |
+| :-------------------------- | :------------------------------------------------------------- | :------------------------------------------------------------ |
+| `child.ResetLocal();`       | `localPosition = 0; localRotation = identity; localScale = 1;` | Resets local position, rotation, and scale in one call.       |
+
+#### 🔹 ResetWorld
+
+| Code Example                | Normal Code                                                | Description                         |
+| :-------------------------- | :--------------------------------------------------------- | :---------------------------------- |
+| `child.ResetWorld();`       | `position = Vector3.zero; rotation = Quaternion.identity;` | Resets **world** position and rotation. |
+
+---
+
+### 1.2 Hierarchy Helpers
+
+#### 🔹 SetParentAndReset
+
+| Code Example                                   | Normal Code                                                | Description                                                   |
+| :--------------------------------------------- | :--------------------------------------------------------- | :------------------------------------------------------------ |
+| `child.SetParentAndReset(targetParent);`       | `SetParent(targetParent); Reset local transform manually.` | Assigns new parent and resets local position/rotation/scale. |
+
+#### 🔹 GetChildren
+
+| Code Example                             | Normal Code                                        | Description                                  |
+| :--------------------------------------- | :------------------------------------------------- | :------------------------------------------- |
+| `var list = parent.GetChildren();`       | `Manual loop adding each child to List<Transform>` | Returns all direct children as a **List**.   |
+
+#### 🔹 GetSiblingIndexChecked
+
+| Code Example                                        | Normal Code                                           | Description                                                   |
+| :-------------------------------------------------- | :---------------------------------------------------- | :------------------------------------------------------------ |
+| `int index = child.GetSiblingIndexChecked();`       | `child.parent != null ? GetSiblingIndex() : -1`       | Safe sibling index; returns `-1` if the Transform has no parent. |
+
+---
+
+## 2. GameObject Extensions
+
+### 2.1 Component Management
+
+#### 🔹 GetOrAddComponent\<T\>
+
+| Code Example                                                   | Normal Code                                                                                                                         | Description                                              |
+| :------------------------------------------------------------- | :---------------------------------------------------------------------------------------------------------------------------------- | :------------------------------------------------------- |
+| `comp = go.GetOrAddComponent<TestComponent>();`                | `var comp = go.GetComponent<TestComponent>(); if (comp == null) comp = go.AddComponent<TestComponent>();`                           | Gets existing component or adds it if missing.           |
+
+#### 🔹 HasComponent\<T\>
+
+| Code Example                                               | Normal Code                                        | Description                                              |
+| :--------------------------------------------------------- | :------------------------------------------------- | :------------------------------------------------------- |
+| `bool hasComp = go.HasComponent<TestComponent>();`         | `go.GetComponent<TestComponent>() != null`         | Quickly checks if a GameObject has a specific component. |
+
+#### 🔹 RemoveComponent\<T\>
+
+| Code Example                                   | Normal Code                                                                                                | Description                                                         |
+| :--------------------------------------------- | :--------------------------------------------------------------------------------------------------------- | :------------------------------------------------------------------ |
+| `go.RemoveComponent<TestComponent>();`         | `var comp = go.GetComponent<TestComponent>(); if (comp != null) DestroyImmediate(comp);`                  | Safely removes a component (Editor/Runtime safe).                  |
+
+---
+
+### 2.2 Activation & State
+
+#### 🔹 ToggleActive
+
+| Code Example                 | Normal Code                                     | Description                            |
+| :--------------------------- | :---------------------------------------------- | :------------------------------------- |
+| `go.ToggleActive();`         | `go.SetActive(!go.activeSelf);`                 | Inverts the GameObject's active state. |
+
+#### 🔹 IsActiveAndEnabled
+
+| Code Example                       | Normal Code                    | Description                                            |
+| :--------------------------------- | :----------------------------- | :----------------------------------------------------- |
+| `go.IsActiveAndEnabled();`         | `go.activeInHierarchy`         | Checks if object is fully active in the hierarchy.     |
+
+#### 🔹 SetChildrenActive
+
+| Code Example                          | Normal Code                                                                   | Description                                                      |
+| :------------------------------------ | :---------------------------------------------------------------------------- | :--------------------------------------------------------------- |
+| `parent.SetChildrenActive(true);`     | `foreach (Transform t in parent.transform) t.gameObject.SetActive(true);`     | Sets active state for all immediate children.                    |
+
+#### 🔹 SetChildActiveAt
+
+| Code Example                             | Normal Code                                                                                              | Description                                               |
+| :--------------------------------------- | :------------------------------------------------------------------------------------------------------- | :-------------------------------------------------------- |
+| `parent.SetChildActiveAt(0, false);`     | `if (0 < parent.transform.childCount) parent.transform.GetChild(0).gameObject.SetActive(false);`        | Safely sets active state for a child at a specific index. |
+
+---
+
+### 2.3 Hierarchy, Tag & Layer
+
+#### 🔹 InstantiateAsChild
+
+| Code Example                                                              | Normal Code                                                                                           | Description                                        |
+| :------------------------------------------------------------------------ | :---------------------------------------------------------------------------------------------------- | :------------------------------------------------- |
+| `var clone = go.InstantiateAsChild(parentTransform);`                     | `var clone = Instantiate(go); clone.transform.SetParent(parentTransform, false);`                     | Clones object and parents it in a single call.     |
+
+#### 🔹 Rename
+
+| Code Example                | Normal Code                | Description                            |
+| :-------------------------- | :------------------------- | :------------------------------------- |
+| `clone.Rename("Enemy_01");` | `clone.name = "Enemy_01";` | Changes the GameObject's name.        |
+
+#### 🔹 SetLayerRecursive
+
+| Code Example                       | Normal Code                                                                                        | Description                                             |
+| :--------------------------------- | :------------------------------------------------------------------------------------------------- | :------------------------------------------------------ |
+| `go.SetLayerRecursive(1);`         | `foreach (Transform t in go.GetComponentsInChildren<Transform>()) t.gameObject.layer = 1;`        | Sets layer for object and all children recursively.     |
+
+#### 🔹 SetTagRecursive
+
+| Code Example                             | Normal Code                                                                                              | Description                                           |
+| :--------------------------------------- | :------------------------------------------------------------------------------------------------------- | :---------------------------------------------------- |
+| `go.SetTagRecursive("Respawn");`         | `foreach (Transform t in go.GetComponentsInChildren<Transform>()) t.gameObject.tag = "Respawn";`         | Sets tag for object and all children recursively.     |
+
+#### 🔹 DestroyChildAt
+
+| Code Example                    | Normal Code                                                                                      | Description                                                     |
+| :------------------------------ | :----------------------------------------------------------------------------------------------- | :-------------------------------------------------------------- |
+| `go.DestroyChildAt(0);`         | `if (0 < go.transform.childCount) Destroy(go.transform.GetChild(0).gameObject);`               | Safely destroys a child by index with bounds checking.          |
+
+---
+
+## 3. Vector Extensions
+
+### 3.1 Axis Manipulation
+
+#### 🔹 With()
+
+| Code Example                                            | Normal Code                                                           | Description                                            |
+| :------------------------------------------------------ | :-------------------------------------------------------------------- | :----------------------------------------------------- |
+| `var v2 = pos.With(y: 20f);`                            | `var v2 = pos; v2.y = 20f;`                                           | Sets Y while preserving X and Z.                      |
+
+#### 🔹 SetX / SetY / SetZ
+
+| Code Example                         | Normal Code                                    | Description                                            |
+| :----------------------------------- | :--------------------------------------------- | :----------------------------------------------------- |
+| `var v2 = pos.SetX(1f);`             | `var v2 = pos; v2.x = 1f;`                     | Sets X while preserving Y and Z.                      |
+
+---
+
+### 3.2 Approximation & Helpers
+
+#### 🔹 IsApproximately
+
+| Code Example                                                              | Normal Code                                                                                                                  | Description                                                                                                 |
+| :------------------------------------------------------------------------ | :--------------------------------------------------------------------------------------------------------------------------- | :---------------------------------------------------------------------------------------------------------- |
+| `pos.IsApproximately(target, 0.001f);`                                    | `var d = (pos - target).sqrMagnitude; bool close = d < (0.001f * 0.001f);`                                                   | Checks if two vectors are approximately equal (float-safe).            |
+
+#### 🔹 DirectionTo
+
+| Code Example                                           | Normal Code                         | Description                                                  |
+| :----------------------------------------------------- | :---------------------------------- | :----------------------------------------------------------- |
+| `var dir = from.DirectionTo(to);`                      | `(to - from).normalized`            | Normalized direction from source to target.                 |
+
+#### 🔹 IsZero
+
+| Code Example                               | Normal Code                                     | Description                                                              |
+| :----------------------------------------- | :---------------------------------------------- | :----------------------------------------------------------------------- |
+| `v.IsZero();`                              | `v.sqrMagnitude < (0.0001f * 0.0001f)`          | Checks if vector is effectively zero.                                    |
+
+#### 🔹 Abs
+
+| Code Example                                     | Normal Code                                                   | Description                                               |
+| :----------------------------------------------- | :------------------------------------------------------------ | :-------------------------------------------------------- |
+| `var absV = v.Abs();`                            | `new Vector3(Mathf.Abs(v.x), Mathf.Abs(v.y), Mathf.Abs(v.z))` | Returns vector with absolute values.                     |
+
+---
+
+### 3.3 Vector2 ⇄ Vector3
+
+#### 🔹 ToVector3
+
+| Code Example                   | Normal Code                   | Description                                    |
+| :----------------------------- | :---------------------------- | :--------------------------------------------- |
+| `Vector3 v3 = v2.ToVector3();` | `new Vector3(v2.x, v2.y, 0f)` | Converts Vector2 to Vector3 (z = 0).           |
+
+---
+
+## 4. Number Extensions (Float & Int)
+
+### 4.1 Float – Checks & Comparison
+
+#### 🔹 IsApproximately
+
+| Code Example                                                           | Normal Code                                          | Description                                                             |
+| :--------------------------------------------------------------------- | :--------------------------------------------------- | :---------------------------------------------------------------------- |
+| `f.IsApproximately(other, 0.001f);`                                    | `Mathf.Abs(f - other) <= 0.001f`                     | Float comparison with tolerance.                                       |
+
+#### 🔹 IsBetween (float)
+
+| Code Example                                | Normal Code            | Description                                                |
+| :------------------------------------------ | :--------------------- | :--------------------------------------------------------- |
+| `f.IsBetween(10f, 20f);`                    | `f >= 10f && f <= 20f` | Checks if float lies in a given inclusive range.          |
+
+#### 🔹 IsNegative / IsPositive
+
+| Code Example                     | Normal Code | Description                         |
+| :------------------------------- | :---------- | :---------------------------------- |
+| `f.IsNegative();`                | `f < 0`     | Checks if value is negative.        |
+
+#### 🔹 ToNormalizedPercentage
+
+| Code Example                                           | Normal Code  | Description                                                       |
+| :----------------------------------------------------- | :----------- | :---------------------------------------------------------------- |
+| `normalized = value.ToNormalizedPercentage(max);`      | `value / max` | Turns a value into a 0–1 range of a total.                       |
+
+---
+
+### 4.2 Float – Formatting & Rounding
+
+#### 🔹 ToTimeFormat
+
+| Code Example                                           | Normal Code                                                                                                                                               | Description                                               |
+| :----------------------------------------------------- | :-------------------------------------------------------------------------------------------------------------------------------------------------------- | :-------------------------------------------------------- |
+| `time.ToTimeFormat();`                                 | `TimeSpan t = TimeSpan.FromSeconds(time); string s = $"{t.Minutes}:{t.Seconds:00}.{t.Milliseconds / 10:00}";`                                             | Formats seconds as `"m:ss.ff"`.                          |
+
+#### 🔹 RoundTo
+
+| Code Example                           | Normal Code                                       | Description                                               |
+| :------------------------------------- | :------------------------------------------------ | :-------------------------------------------------------- |
+| `value.RoundTo(2);`                    | `(float)Math.Round(value, 2);`                    | Rounds float to given decimals.                          |
+
+#### 🔹 ToDegrees
+
+| Code Example                        | Normal Code                | Description                         |
+| :---------------------------------- | :------------------------- | :---------------------------------- |
+| `Mathf.PI.ToDegrees();`             | `Mathf.PI * Mathf.Rad2Deg` | Radians → degrees.                 |
+
+---
+
+### 4.3 Int – Checks
+
+#### 🔹 IsEven / IsOdd
+
+| Code Example        | Normal Code  | Description                   |
+| :------------------ | :----------- | :---------------------------- |
+| `i.IsEven();`       | `i % 2 == 0` | True if even.                 |
+| `i.IsOdd();`        | `i % 2 != 0` | True if odd.                  |
+
+#### 🔹 IsBetween (int)
+
+| Code Example                      | Normal Code           | Description                                                   |
+| :-------------------------------- | :-------------------- | :------------------------------------------------------------ |
+| `i.IsBetween(-10, -1);`           | `i >= -10 && i <= -1` | Inclusive integer range check.                                |
+
+#### 🔹 IsPositive
+
+| Code Example                | Normal Code | Description                                             |
+| :-------------------------- | :---------- | :------------------------------------------------------ |
+| `i.IsPositive();`           | `i > 0`     | Checks if integer is strictly greater than zero.       |
+
+---
+
+## 5. Collection Extensions (List & Array)
+
+### 5.1 Safe Access
+
+#### 🔹 IsNullOrEmpty
+
+| Code Example            | Normal Code                                | Description                                  |
+| :---------------------- | :----------------------------------------- | :------------------------------------------- |
+| `names.IsNullOrEmpty()` | `names == null || names.Count == 0`        | Checks if collection is null or empty.       |
+
+#### 🔹 GetSafe\<T\>
+
+| Code Example                              | Normal Code                                                                        | Description                                                                  |
+| :---------------------------------------- | :--------------------------------------------------------------------------------- | :--------------------------------------------------------------------------- |
+| `string s = names.GetSafe(99);`           | `if (index >= 0 && index < names.Count) return names[index]; else return default;` | Safely gets element or returns default.                                     |
+
+#### 🔹 TryGet\<T\>
+
+| Code Example                                         | Normal Code                                                                              | Description                                                                    |
+| :--------------------------------------------------- | :--------------------------------------------------------------------------------------- | :----------------------------------------------------------------------------- |
+| `if (names.TryGet(1, out var found)) { ... }`        | `if (1 >= 0 && 1 < names.Count) { found = names[1]; } else { found = default; }`        | Safe getter returning bool and output value.                                  |
+
+---
+
+### 5.2 Randomness & Ordering
+
+#### 🔹 RandomElement (List / Array)
+
+| Code Example                                 | Normal Code                                                                   | Description                             |
+| :------------------------------------------- | :---------------------------------------------------------------------------- | :-------------------------------------- |
+| `var randomName = names.RandomElement();`    | `var i = Random.Range(0, names.Count); var randomName = names[i];`           | Picks a random element.                 |
+
+#### 🔹 Shuffle
+
+| Code Example       | Normal Code                                           | Description                           |
+| :----------------- | :---------------------------------------------------- | :------------------------------------ |
+| `names.Shuffle();` | `// Implement Fisher-Yates manually`                  | Randomly reorders list elements.      |
+
+#### 🔹 RemoveRandom
+
+| Code Example                             | Normal Code                                                                                       | Description                              |
+| :--------------------------------------- | :------------------------------------------------------------------------------------------------ | :--------------------------------------- |
+| `string removed = names.RemoveRandom();` | `int index = Random.Range(0, names.Count); removed = names[index]; names.RemoveAt(index);`        | Removes and returns a random element.    |
+
+---
+
+### 5.3 Bulk Operations
+
+#### 🔹 AddRangeUnique
+
+| Code Example                                         | Normal Code                                                                      | Description                                                                         |
+| :--------------------------------------------------- | :------------------------------------------------------------------------------- | :---------------------------------------------------------------------------------- |
+| `int count = names.AddRangeUnique(itemsToAdd);`      | `foreach(var item in itemsToAdd) if(!names.Contains(item)) names.Add(item);`    | Adds only non-existing items, returns how many were added.                         |
+
+#### 🔹 RemoveAll
+
+| Code Example                                            | Normal Code                                                  | Description                                                    |
+| :------------------------------------------------------ | :----------------------------------------------------------- | :------------------------------------------------------------- |
+| `names.RemoveAll(itemsToRemove);`                       | `foreach(var item in itemsToRemove) { names.Remove(item); }` | Removes all items that are present in another collection.      |
+
+---
+
+## 6. String Extensions
+
+### 6.1 Validation & Checking
+
+#### 🔹 IsNullOrEmpty / IsNullOrWhiteSpace
+
+| Code Example                            | Normal Code                                   | Description                                                          |
+| :-------------------------------------- | :-------------------------------------------- | :------------------------------------------------------------------- |
+| `s.IsNullOrEmpty();`                    | `string.IsNullOrEmpty(s)`                     | Checks null or empty.                                                |
+| `s.IsNullOrWhiteSpace();`              | `string.IsNullOrWhiteSpace(s)`                | Checks null/empty or only whitespace.                                |
+
+#### 🔹 ContainsAny
+
+| Code Example                                   | Normal Code                                                                         | Description                                                    |
+| :--------------------------------------------- | :---------------------------------------------------------------------------------- | :------------------------------------------------------------- |
+| `s.ContainsAny(searchValues);`                 | `foreach (var v in searchValues) if (s.Contains(v)) return true;`                  | True if any of the substrings is contained.                    |
+
+#### 🔹 IsNumeric
+
+| Code Example                | Normal Code                            | Description                                     |
+| :-------------------------- | :------------------------------------- | :---------------------------------------------- |
+| `s.IsNumeric();`            | `float.TryParse(s, out _)`             | True if string can be parsed as number.         |
+
+---
+
+### 6.2 Case, Length & Cleaning
+
+#### 🔹 GetLength
+
+| Code Example                 | Normal Code             | Description                       |
+| :--------------------------- | :---------------------- | :-------------------------------- |
+| `s.GetLength();`             | `s.Length`              | Returns string length.            |
+
+#### 🔹 RemoveChar
+
+| Code Example                                 | Normal Code                                                        | Description                                                     |
+| :------------------------------------------- | :----------------------------------------------------------------- | :-------------------------------------------------------------- |
+| `s.RemoveChar('a');`                         | `s.Replace("a", string.Empty);`                                    | Removes all instances of a specific char.                      |
+
+#### 🔹 Cut
+
+| Code Example                 | Normal Code                                                             | Description                                                 |
+| :--------------------------- | :---------------------------------------------------------------------- | :---------------------------------------------------------- |
+| `s.Cut(maxLength);`          | `if (s.Length > maxLength) s = s.Substring(0, maxLength) + "...";`      | Truncates and adds "…" if too long.                        |
+
+#### 🔹 RemoveWhitespace
+
+| Code Example                     | Normal Code                                                | Description                                                 |
+| :------------------------------- | :--------------------------------------------------------- | :---------------------------------------------------------- |
+| `"a b\tc\nd".RemoveWhitespace()` | `Replace(" ", "").Replace("\t", "").Replace("\n", "")`     | Removes spaces, tabs, and newlines.                        |
+
+---
+
+## 7. UI Text & TMP Extensions
+
+> Applies to **Text** or **TextMeshProUGUI** depending on your implementation.
+
+Examples:
+
+- `text.SetTextAndColor("Status: OK", Color.green);`
+- `text.SetAlpha(0.5f);`
+- `text.SetTextSafe("Hello");`
+- `text.IsTextSet();`
+- `text.ClearText();`
+- `text.ToggleVisibility();` (alpha 0 ↔ 1)
+- `"Score".ToBold().Colorize(Color.red).Size(150);`
+- `StartCoroutine(text.FadeToAlpha(1f, 1.5f));`
+- `text.SetTextFormat("Score: {0}", score);`
+
+These helpers make it easy to apply formatting, fades and rich tags without repeating boilerplate.
+
+---
+
+## 8. Image / Button / Toggle / Slider Extensions
+
+### 8.1 Image
+
+- `image.SetColor(color);`
+- `image.SetAlpha(0.5f);`
+- `image.SetSprite(newSprite);`
+- `image.ToggleVisibility();` (alpha 0 ↔ 1)
+
+### 8.2 Button
+
+- `button.SetInteractable(true);`
+- `button.ToggleInteractable();`
+- `button.AddListener(() => OnClicked());`
+
+### 8.3 Toggle
+
+- `toggle.SetValue(true);`
+- `toggle.AddListener(OnToggleChanged);`
+- `toggle.SetValue(false, notify: false);` (no events)
+
+### 8.4 Slider
+
+- `slider.SetRange(0, 100);`
+- `slider.SetWholeNumbers(true);`
+- `slider.SetValue(50f);`
+- `slider.AddListener(OnSliderChanged);`
+
+---
+
+## 9. Renderer & Material Extensions
+
+### 9.1 SpriteRenderer
+
+- `sprite.ResetColor();`
+- `sprite.SetAlpha(0.3f);`
+- `sprite.SetColor(Color.red);`
+- `sprite.SetColorAndAlpha(Color.blue, 1f);`
+- `sprite.ToggleVisibility();`
+- `sprite.SetSprite(newSprite);`
+- `sprite.SetSortingOrder(100);`
+- `sprite.SetSortingLayer("UI");`
+
+### 9.2 Material
+
+- `_mat.SetMainColor(Color.green);`
+- `_mat.SetAlpha(0.5f);`
+- `_mat.SetEmissionColor(Color.blue);`
+- `_mat.SetColor("_SpecColor", Color.yellow);`
+- `_mat.SetOffset(new Vector2(0.2f, 0.5f));`
+- `_mat.SetTiling(new Vector2(2, 2));`
+- `_mat.SetFloat("_Glossiness", 0.8f);`
+
+### 9.3 MeshRenderer
+
+- `renderer.IsRendererActive();`
+- `renderer.ToggleRenderer(false);`
+- `renderer.SetShadowCastingMode(ShadowCastingMode.Off);`
+- `renderer.SetReceiveShadows(false);`
+- `renderer.ToggleCastShadows();`
+- `renderer.SetReflectionProbeUsage(ReflectionProbeUsage.BlendProbes);`
+- `var mat = renderer.GetMaterial();`
+- `renderer.SetMaterial(newMat);`
+- `renderer.SetMaterials(new Material[] { mat });`
+
+---
+
+## 10. Camera Extensions
+
+- `camera.ScreenToWorld(screenPoint, zDepth);`
+- `camera.WorldToViewport(worldPos);`
+- `Bounds b = camera.GetOrthographicBounds();`
+- `camera.SetClearColor(Color.blue);`
+- `camera.SetOrthographicSize(8f);`
+- `bool visible = camera.IsVisible(renderer);`
+
+---
+
+## 11. Time Extensions
+
+- `timeInSeconds.ToMinutesAndSeconds();` → `"MM:SS"`
+- `timeInSeconds.ToMinutesAndSeconds(true);` → `"MM:SS.ms"`
+- `timeInSeconds.ToHoursMinutesAndSeconds();` → `"HH:MM:SS"`
+- `0.0000001f.IsZero();` → float epsilon check
+- `1.0f.ToFrames();` → seconds → frames (based on `fixedDeltaTime`)
+- `TimeExtensions.TogglePause();` → toggles `Time.timeScale` 0 ↔ 1
+- `TimeExtensions.ResumeTime();` → sets `timeScale = 1`
+
+---
+
+## 12. MonoBehaviour Extensions
+
+- `this.StartCoroutineSafe(MyRoutine());`
+- `this.StopCoroutineSafe(_routineRef);`
+- `this.RestartCoroutine(MyRoutine(), ref _routineRef);`
+- `this.Delay(2.5f, () => DoSomething());`
+- `this.DelayOneFrame(() => DoSomething());`
+- `this.DelayUntil(() => ready, () => DoSomething());`
+
+These are safer replacements for `StartCoroutine`, `StopCoroutine`, and `Invoke`, avoiding null reference issues.
+
+---
+
+## 13. Enum & Flags Extensions (Examples)
+
+- `currentDifficulty.GetDescription();`
+- `currentDifficulty.GetName();`
+- `Difficulty next = currentDifficulty.Next();`
+- `Difficulty prev = currentDifficulty.Previous();`
+- `var values = EnumExtensions.GetValues<Difficulty>();`
+- `abilities = abilities.SetFlag(PlayerAbilities.Shield, true);`
+
+Makes enum cycling, description reading and flag handling much easier.
+
+---
+
+## 14. MathF Extensions
+
+- `value.Remap(0f, originalMax, 0f, targetMax);`
+- `value.Normalize(0f, originalMax);`
+- `angle.Wrap(0f, 360f);`
+- `value.GetSign();`
+- `i.IsInRange(0, 10);`
+- `f.IsInRange(50f, 60f);`
+- `n.IsPowerOfTwo();`
+- `n.NextPowerOfTwo();`
+- `f.IsApproximately(1.0f);`
+
+---
+
+## Tips for Usage
+
+- Add your extension namespaces in a **central using file** or top of each script.
+- Prefer these helpers to reduce **boilerplate** and keep code **clean & readable**.
+- If something is missing, you can easily add a new extension following the same patterns.
+
+Happy coding 🚀
